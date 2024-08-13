@@ -59,6 +59,26 @@ impl<
         Ok(())
     }
 
+    /// Sets the page to write into
+    pub fn set_page(&mut self, page: u8) -> Result<(), DisplayError> {
+        self.interface
+            .send_command(Command::PageAddressSet { address: page })
+    }
+
+    /// Sets the column to write into
+    pub fn set_column(&mut self, address: u8) -> Result<(), DisplayError> {
+        self.interface
+            .send_command(Command::ColumnAddressSet { address })
+    }
+
+    /// Writes raw pixel data.
+    ///
+    /// For more information how data is processed by the display, read the
+    /// ST7565 reference manual.
+    pub fn write_pixel_data(&mut self, data: &[u8]) -> Result<(), DisplayError> {
+        self.interface.send_data(U8(data))
+    }
+
     /// Release the display interface object
     ///
     /// This is meant for situations where the display interface is shared between several devices.
